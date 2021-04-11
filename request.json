@@ -1,7 +1,6 @@
 {
-    "instances":[
-        [4.9, 3, 1.4, 0.2],
-        [0, 0, 0, 1.8],
-        [5.9, 3, 5.1, 1.8]
-    ]
+    "instances": [["female", 43.0, 211.3375, 1, "S", "St Louis, MO", 1, 0], ["male", 56.0, 35.5, 1, "C", "Basel, Switzerland", 0, 0]],
+    "parameters": {
+        "predict_proba": true
+    }
 }
