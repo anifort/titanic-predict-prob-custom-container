@@ -1,6 +1,4 @@
 import json, pickle, os,logging
-#from flask import Flask, request
-#from joblib import load
 from google.cloud import storage
 from argparse import ArgumentParser
 import uvicorn
@@ -14,8 +12,6 @@ logging.root.handlers.extend(gunicorn_error_logger.handlers)
 logging.root.setLevel(gunicorn_error_logger.level)
 
 app = FastAPI()
-
-#app = Flask(__name__)
 
 obj = {}
 
@@ -95,7 +91,6 @@ async def predict(request: Request):
 #@app.route("/health-check", methods=["GET"])
 def health():
     return {}
-
     
 if __name__ == "__main__":
     parser = ArgumentParser()
