@@ -15,6 +15,8 @@ app = FastAPI()
 
 obj = {}
 
+# satrup_event is called only once when the server is started. 
+# we use this to load the model from cloud storage.
 @app.on_event("startup")
 async def startup_event():
     
@@ -36,7 +38,7 @@ async def startup_event():
     print(file_path)
     obj['clf'] = pickle.loads(blob.download_as_string())
     
-    
+# Used to process the model uri to get bucket path and file seperetly    
 def process_gcs_uri(uri: str) -> (str, str, str, str):
     '''
     Receives a Google Cloud Storage (GCS) uri and breaks it down to the sheme, bucket, path and file
@@ -63,7 +65,7 @@ def process_gcs_uri(uri: str) -> (str, str, str, str):
     return scheme, bucket, path, file
 
 
-#@app.route("/predict", methods=["POST"])
+# Post method that gets the instances to run predictions
 @app.post("/predict")
 async def predict(request: Request):
     req = await request.json() # concour object
@@ -85,8 +87,9 @@ async def predict(request: Request):
     return {"predictions": pred.tolist() }
 
 
-# If the server is not ready to handle prediction requests, do not respond to the health check request within 10 seconds,
-# or respond with any status code except for 200 OK. For example, respond with status code 503 Service Unavailable.
+# health is used to signify that the server is ready to run predictions
+# If the server is not ready to handle prediction requests,
+# respond with any status code except for 200 OK. i.e status code 503 Service Unavailable.
 @app.get("/health-check")
 #@app.route("/health-check", methods=["GET"])
 def health():
