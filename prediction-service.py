@@ -79,6 +79,8 @@ async def predict(request: Request):
         params =  req["parameters"]
     
     pred = None
+    # if user set in parameters predict_proba: true and if the model supports predict_proba, then return probabilities
+    # else return normal predictions
     if hasattr(obj['clf'],'predict_proba') and "predict_proba" in params and params['predict_proba']==True:
         pred = obj['clf'].predict_proba(data)
     else:
@@ -94,7 +96,13 @@ async def predict(request: Request):
 #@app.route("/health-check", methods=["GET"])
 def health():
     return {}
-    
+
+
+# Entry point and service start
+# can accept command line arguments for model gs:// location or if not passed it will use 
+# 'AIP_STORAGE_URI' environment variable. This veriable is set automatically if you select
+# a model already imported in uCAIP so if you run this for uCAIP you do not have to pass
+# CLI param --model-dir 
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument(
